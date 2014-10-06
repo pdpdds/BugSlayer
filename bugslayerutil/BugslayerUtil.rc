@@ -1,0 +1,63 @@
+/*----------------------------------------------------------------------
+"Debugging Applications" (Microsoft Press)
+Copyright (c) 1997-2000 John Robbins -- All rights reserved.
+----------------------------------------------------------------------*/
+
+/*//////////////////////////////////////////////////////////////////////
+                            Special Includes
+//////////////////////////////////////////////////////////////////////*/
+#include <windows.h>
+#include <winver.h>
+
+/*//////////////////////////////////////////////////////////////////////
+                      US English Language Section!
+//////////////////////////////////////////////////////////////////////*/
+LANGUAGE LANG_ENGLISH , SUBLANG_ENGLISH_US
+
+/*//////////////////////////////////////////////////////////////////////
+                             Message Tables
+//////////////////////////////////////////////////////////////////////*/
+
+/*//////////////////////////////////////////////////////////////////////
+                             String Tables
+//////////////////////////////////////////////////////////////////////*/
+
+/*//////////////////////////////////////////////////////////////////////
+                          Version Information
+//////////////////////////////////////////////////////////////////////*/
+VS_VERSION_INFO     VERSIONINFO
+    FILEVERSION     3,0,0,0
+    PRODUCTVERSION  3,0,0,0
+    FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
+    FILEFLAGS       VS_FF_DEBUG | VS_FF_PRIVATEBUILD | VS_FF_PRERELEASE
+#else
+    FILEFLAGS       0               // final version
+#endif
+    FILEOS          VOS__WINDOWS32
+    FILETYPE        VFT_DLL
+    FILESUBTYPE     0               // not used
+BEGIN
+BLOCK "StringFileInfo"
+    BEGIN
+    // Lang=US English, CharSet=Windows Multilingual
+    BLOCK "040904E4"
+        BEGIN
+        VALUE "CompanyName"         ,   "MSJ Bugslayer Column and the book ""Debugging Microsoft Windows Applications""\0"
+        VALUE "FileDescription"     ,   "Bugslayer Utility Routines\0"
+        VALUE "FileVersion"         ,   "3.0.000\0"
+        VALUE "InternalName"        ,   "BugslayerUtil\0"
+        VALUE "LegalCopyright"      ,   "Copyright © 1997-2000 by John Robbins\0"
+        //VALUE "LegalTrademarks"     ,   "\0"
+        VALUE "OriginalFilename"    ,   "BugslayerUtil.DLL\0"
+        VALUE "ProductName"         ,   "\0"
+        VALUE "ProductVersion"      ,   "3.0.000\0"
+        VALUE "Comments"            ,   "De Oppresso Liber\0"
+    END
+END
+BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation" , 0x409 , 1252
+    END
+END
+

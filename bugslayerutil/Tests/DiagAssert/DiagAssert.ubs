@@ -1,0 +1,20 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; UBSMaker created Universal Build System configuration file.
+; File     : D:\dev\Column\Feb99\SourceCode\BugslayerUtil\Tests\DiagAssert\DiagAssert.ubs
+; Date     : 11/09/1998
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Project]
+Type = EXE
+Proj = DiagAssert
+IncludeDir = ..\..\..\include;
+
+[Macros]
+CONSOLEAPP = 1
+OUTDIR = ..\..\..\Output
+USERLIBS = $(OUTDIR)\BugslayerUtil.lib
+
+[Files]
+= AssertTest.cpp
+= AssertTest.rc
+

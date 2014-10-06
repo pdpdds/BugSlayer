@@ -1,0 +1,28 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; UBSMaker created Universal Build System configuration file.
+; File     : D:\dev\Column\Feb98\SourceCode\BugslayerUtil\Tests\Dump\Dump.ubs
+; Date     : 10/15/1997
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Project]
+Type = EXE
+Proj = Dump
+IncludeDir = ..\..\..\Include;
+
+[Defines]
+= _DEBUG
+
+[Macros]
+CONSOLEAPP = 1
+
+[Macros - _DEBUG]
+OUTDIR = ..\..\..\Output
+USERLIBS = ..\..\..\output\BugslayerUtil.lib
+
+[Macros - _RELEASE]
+OUTDIR = ..\..\..\Release
+USERLIBS = ..\..\..\Release\BugslayerUtil.lib
+
+[Files]
+= Dump.cpp
+

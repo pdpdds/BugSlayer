@@ -1,0 +1,28 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; UBSMaker created Universal Build System configuration file.
+; File     : D:\dev\Column\Feb98\SourceCode\BugslayerUtil\Tests\HookImportedFunctionByName\HookImportedFunctionByName.ubs
+; Date     : 09/07/1997
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Project]
+Type = EXE
+Proj = HookImportedFunctionByName
+IncludeDir = ..\..\..\Include;
+
+[Defines]
+= _DEBUG
+
+[Macros]
+CONSOLEAPP = 1
+
+[Macros - _DEBUG]
+USERLIBS = ..\..\..\Output\BugslayerUtil.lib
+OUTDIR = ..\..\..\Output
+
+[Macros - _RELEASE]
+USERLIBS = ..\..\..\Release\BugslayerUtil.lib
+OUTDIR = ..\..\..\Release
+
+[Files]
+= HIFBN_Test.cpp
+

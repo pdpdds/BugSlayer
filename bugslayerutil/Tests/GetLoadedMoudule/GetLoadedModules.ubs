@@ -1,0 +1,28 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; UBSMaker created Universal Build System configuration file.
+; File     : D:\dev\Column\Feb98\SourceCode\BugslayerUtil\Tests\GetLoadedModules\GetLoadedModules.ubs
+; Date     : 09/07/1997
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Project]
+Type = EXE
+Proj = GetLoadedModules
+IncludeDir = ..\..\..\include;
+
+[Defines]
+= _DEBUG
+
+[Macros]
+CONSOLEAPP = 1
+
+[Macros - _DEBUG]
+OUTDIR = ..\..\..\Output
+USERLIBS = ..\..\..\output\BugslayerUtil.lib
+
+[Macros - _RELEASE]
+OUTDIR = ..\..\..\Release
+USERLIBS = ..\..\..\Release\BugslayerUtil.lib
+
+[Files]
+= GLM_Test.cpp
+

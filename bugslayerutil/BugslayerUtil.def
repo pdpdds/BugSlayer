@@ -1,0 +1,40 @@
+LIBRARY         BugslayerUtil
+DESCRIPTION     'MSJ Bugslayer & Debugging MS Windows Apps Utility Library'
+
+EXPORTS
+
+    AddClientDV
+    AddCrashHandlerLimitModule
+    AddDiagAssertModule
+    AllocAndFillProcessModuleList
+    BSUGetModuleBaseName
+    BSUGetModuleFileNameEx
+    BSUSymInitialize
+    DiagAssertA
+    DiagAssertVB
+    DiagAssertW
+    DiagOutputA
+    DiagOutputVB
+    DiagOutputW
+    GetFaultReason
+    GetFaultReasonVB
+    GetFirstStackTraceString
+    GetFirstStackTraceStringVB
+    GetLimitModuleCount
+    GetLimitModulesArray
+    GetLoadedModules
+    GetNextStackTraceString
+    GetNextStackTraceStringVB
+    GetRegisterString
+    GetRegisterStringVB
+    HookImportedFunctionsByName
+    HookOrdinalExport
+    IsNT
+    MemStressInitializeA
+    MemStressInitializeW
+    MemStressTerminate
+    SetCrashHandlerFilter
+    SetDiagAssertFile
+    SetDiagAssertOptions
+    SetDiagOutputFile
+    ValidateAllBlocks

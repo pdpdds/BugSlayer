@@ -1,0 +1,29 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; UBSMaker created Universal Build System configuration file.
+; File     : D:\dev\Column\August98\SourceCode\BugslayerUtil\Tests\CrashHandler\CH_Test.ubs
+; Date     : 04/11/1998
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Project]
+Type = EXE
+Proj = CH_Tests
+IncludeDir = ..\..\..\include;
+
+[Defines]
+= _DEBUG
+
+[Macros]
+CONSOLEAPP = 1
+NO_INCREMENTAL_LINK = 1
+
+[Macros - _DEBUG]
+OUTDIR = ..\..\..\Output
+USERLIBS = ..\..\..\output\BugslayerUtil.lib IMAGEHLP.LIB
+
+[Macros - _RELEASE]
+OUTDIR = ..\..\..\Release
+USERLIBS = ..\..\..\Release\BugslayerUtil.lib IMAGEHLP.LIB
+
+[Files]
+= CH_Tests.cpp
+
