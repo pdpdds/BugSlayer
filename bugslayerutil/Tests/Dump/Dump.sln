@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BugslayerUtil", "BugslayerUtil.vcxproj", "{54483B40-5610-466C-8435-103CD2BA6791}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dump", "Dump.vcxproj", "{9E9343B5-D13E-4DD3-84B0-DF922DB02014}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54483B40-5610-466C-8435-103CD2BA6791} = {54483B40-5610-466C-8435-103CD2BA6791}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BugslayerUtil", "..\..\BugslayerUtil.vcxproj", "{54483B40-5610-466C-8435-103CD2BA6791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +18,12 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Debug|Win32.Build.0 = Debug|Win32
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Debug|x64.ActiveCfg = Debug|x64
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Release|Win32.ActiveCfg = Debug|Win32
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Release|Win32.Build.0 = Debug|Win32
+		{9E9343B5-D13E-4DD3-84B0-DF922DB02014}.Release|x64.ActiveCfg = Debug|Win32
 		{54483B40-5610-466C-8435-103CD2BA6791}.Debug|Win32.ActiveCfg = Debug|Win32
 		{54483B40-5610-466C-8435-103CD2BA6791}.Debug|Win32.Build.0 = Debug|Win32
 		{54483B40-5610-466C-8435-103CD2BA6791}.Debug|x64.ActiveCfg = Debug|x64

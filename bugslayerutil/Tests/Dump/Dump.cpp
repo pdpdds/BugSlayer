@@ -6,7 +6,7 @@ Copyright (c) 1997-2000 John Robbins -- All rights reserved.
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
-#include <iostream.h>
+#include <iostream>
 #include "BugslayerUtil.h"
 
 class TestClass
@@ -103,7 +103,7 @@ static DVINFO g_dvTwo ;
 
 void main ( void )
 {
-    cout << "At start of main\n" ;
+    std::cout << "At start of main\n" ;
 
     // The memory debugging initialization for type one.
     INITIALIZE_MEMDEBUG ( &g_dvOne , DumperOne , ValidatorOne )  ;
@@ -129,7 +129,7 @@ void main ( void )
     // Validate all the blocks in the list.
     VALIDATEALLBLOCKS ( NULL ) ;
 
-    cout << "At end of main\n" ;
+    std::cout << "At end of main\n" ;
 
     // Every block will get dumped as part of the memory leak checking.
 

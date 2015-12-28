@@ -240,7 +240,7 @@ void BUGSUTIL_DLLINTERFACE __stdcall
         if ( !(x)                                               &&  \
              DiagAssert ( a , _T ( #x ) , __FILE__  , __LINE__)    )\
         {                                                           \
-                __asm int 3                                         \
+                __debugbreak();                                         \
         }                                                           \
     } while (0)
 #endif  // PORTABLE_BUGSLAYERUTIL

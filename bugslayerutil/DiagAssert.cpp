@@ -403,8 +403,11 @@ void BUGSUTIL_DLLINTERFACE __stdcall
     DiagOutputA ( szMsg ) ;
 }
 
-
+#ifdef _WIN64
+static DWORD64 __stdcall GetModBase(HANDLE hProcess, DWORD64 dwAddr)
+#else
 static DWORD __stdcall GetModBase ( HANDLE hProcess , DWORD dwAddr )
+#endif
 {
     // Check in the symbol engine first.
     IMAGEHLP_MODULE stIHM ;
@@ -460,11 +463,22 @@ static DWORD __stdcall GetModBase ( HANDLE hProcess , DWORD dwAddr )
 #ifdef _DEBUG
             DWORD dwRet =
 #endif
+#ifdef _WIN64
+				
+			
+				g_cSym.SymLoadModule(hProcess, hFile,
+				(dwNameLen ? szFile : NULL),
+				NULL,
+				(DWORD)stMBI.AllocationBase,
+				0);
+#else
             g_cSym.SymLoadModule ( hFile                            ,
                                    ( dwNameLen ? szFile : NULL )    ,
                                    NULL                             ,
                                    (DWORD)stMBI.AllocationBase      ,
                                    0                                 ) ;
+#endif
+
 #ifdef _DEBUG
             if ( 0 == dwRet )
             {
@@ -521,7 +535,11 @@ static DWORD ConvertAddress ( DWORD dwAddr , LPTSTR szOutBuff )
     }
 
     // Get the function.
-    DWORD dwDisp ;
+#ifdef _WIN64
+	DWORD64 dwDisp ;
+#else
+	DWORD dwDisp;
+#endif
     if ( 0 != g_cSym.SymGetSymFromAddr ( dwAddr , &dwDisp , pIHS ) )
     {
         if ( 0 == dwDisp )
@@ -543,8 +561,9 @@ static DWORD ConvertAddress ( DWORD dwAddr , LPTSTR szOutBuff )
 
         stIHL.SizeOfStruct = sizeof ( IMAGEHLP_LINE ) ;
 
+		DWORD dwDisp32;
         if ( 0 != g_cSym.SymGetLineFromAddr ( dwAddr  ,
-                                              &dwDisp ,
+			&dwDisp32,
                                               &stIHL   ) )
         {
             // Put this on the next line and indented a bit.
@@ -552,11 +571,11 @@ static DWORD ConvertAddress ( DWORD dwAddr , LPTSTR szOutBuff )
                                   _T ( "\n\t\t%s, Line %d" ) ,
                                   stIHL.FileName             ,
                                   stIHL.LineNumber            ) ;
-            if ( 0 != dwDisp )
+			if (0 != dwDisp32)
             {
                 pCurrPos += wsprintf ( pCurrPos             ,
                                        _T ( " + %d bytes" ) ,
-                                       dwDisp                ) ;
+									   dwDisp32);
             }
         }
     }
@@ -635,6 +654,8 @@ void DoStackTrace ( LPTSTR szString  ,
 #elif defined (_M_ALPHA)
         dwMachine                = IMAGE_FILE_MACHINE_ALPHA ;
         stFrame.AddrPC.Offset    = (unsigned long)stCtx.Fir ;
+#elif defined (_M_X64)
+		//20151229
 #else
 #error ( "Unknown machine!" )
 #endif

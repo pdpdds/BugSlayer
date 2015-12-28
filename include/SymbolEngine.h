@@ -230,11 +230,22 @@ public      :
                                          UserContext           ) ) ;
     }
 
+#ifdef _WIN64
+	BOOL SymLoadModule(
+		_In_ HANDLE hProcess,
+		_In_opt_ HANDLE hFile,
+		_In_opt_ PCSTR ImageName,
+		_In_opt_ PCSTR ModuleName,
+		_In_ DWORD64 BaseOfDll,
+		_In_ DWORD SizeOfDll
+		)
+#else
     BOOL SymLoadModule ( IN  HANDLE hFile       ,
                          IN  PSTR   ImageName   ,
                          IN  PSTR   ModuleName  ,
                          IN  DWORD  BaseOfDll   ,
                          IN  DWORD  SizeOfDll    )
+#endif
     {
         return ( ::SymLoadModule ( m_hProcess   ,
                                    hFile        ,
@@ -289,9 +300,15 @@ public      :
 			UserContext));		
     }
 
-    BOOL SymGetSymFromAddr ( IN  DWORD               dwAddr          ,
-                             OUT PDWORD              pdwDisplacement ,
-                             OUT PIMAGEHLP_SYMBOL    Symbol           )
+#ifdef _WIN64
+	BOOL SymGetSymFromAddr ( IN  DWORD               dwAddr          ,
+		OUT PDWORD64              pdwDisplacement,
+		OUT PIMAGEHLP_SYMBOL    Symbol           )
+#else
+	BOOL SymGetSymFromAddr(IN  DWORD               dwAddr,
+		OUT PDWORD              pdwDisplacement,
+		OUT PIMAGEHLP_SYMBOL    Symbol)
+#endif    
     {
         return ( ::SymGetSymFromAddr ( m_hProcess       ,
                                        dwAddr           ,
@@ -420,9 +437,17 @@ public      :
         return ( ::SymSetSearchPath ( m_hProcess , SearchPath ) ) ;
     }
 
+#ifdef _WIN64
+	BOOL SymRegisterCallback64(
+		_In_ HANDLE hProcess,
+		_In_ PSYMBOL_REGISTERED_CALLBACK64 CallbackFunction,
+		_In_ ULONG64 UserContext
+		)
+#else
     BOOL SymRegisterCallback ( IN PSYMBOL_REGISTERED_CALLBACK
                                                        CallbackFunction,
                                IN PVOID                UserContext    )
+#endif
     {
         return ( ::SymRegisterCallback ( m_hProcess         ,
                                          CallbackFunction   ,

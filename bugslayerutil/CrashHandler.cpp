@@ -77,7 +77,6 @@ BOOL InternalSymGetLineFromAddr ( IN  HANDLE          hProcess        ,
                                   IN  DWORD           dwAddr          ,
                                   OUT PDWORD          pdwDisplacement ,
                                   OUT PIMAGEHLP_LINE  Line            );
-
 // Initializes the symbol engine if needed
 void InitSymEng ( void ) ;
 
@@ -452,13 +451,18 @@ LPCTSTR __stdcall GetFaultReason ( EXCEPTION_POINTERS * pExPtrs )
         pSym->SizeOfStruct = sizeof ( IMAGEHLP_SYMBOL ) ;
         pSym->MaxNameLength = SYM_BUFF_SIZE - sizeof ( IMAGEHLP_SYMBOL);
 
-        DWORD dwDisp ;
-        if ( TRUE ==
-              SymGetSymFromAddr ( (HANDLE)GetCurrentProcessId ( )     ,
-                                  (DWORD)pExPtrs->ExceptionRecord->
-                                                     ExceptionAddress ,
-                                  &dwDisp                             ,
-                                  pSym                                ))
+#ifdef _WIN64
+        DWORD64 dwDisp;
+#else
+		DWORD dwDisp;
+#endif
+		if (TRUE ==
+			SymGetSymFromAddr((HANDLE)GetCurrentProcessId(),
+			(DWORD)pExPtrs->ExceptionRecord->
+			ExceptionAddress,
+			&dwDisp,
+			pSym))
+
         {
             iCurr += wsprintf ( g_szBuff + iCurr , _T ( ", " ) ) ;
 
@@ -508,13 +512,14 @@ LPCTSTR __stdcall GetFaultReason ( EXCEPTION_POINTERS * pExPtrs )
         ZeroMemory ( &g_stLine , sizeof ( IMAGEHLP_LINE ) ) ;
         g_stLine.SizeOfStruct = sizeof ( IMAGEHLP_LINE ) ;
 
+		DWORD dwDisp32;
         if ( TRUE ==
               InternalSymGetLineFromAddr ((HANDLE)
                                             GetCurrentProcessId ( )    ,
                                           (DWORD)pExPtrs->
                                                     ExceptionRecord->
                                                       ExceptionAddress ,
-                                          &dwDisp                      ,
+													  &dwDisp32,
                                           &g_stLine                   ))
         {
             iCurr += wsprintf ( g_szBuff + iCurr , _T ( ", " ) ) ;
@@ -534,13 +539,13 @@ LPCTSTR __stdcall GetFaultReason ( EXCEPTION_POINTERS * pExPtrs )
             }
             else
             {
-                if ( dwDisp > 0 )
+				if (dwDisp32 > 0)
                 {
                     iCurr += wsprintf ( g_szBuff + iCurr              ,
                                       _T("%s, line %04d+%04d byte(s)"),
                                         g_stLine.FileName             ,
                                         g_stLine.LineNumber           ,
-                                        dwDisp                       );
+										dwDisp32);
                 }
                 else
                 {
@@ -613,7 +618,14 @@ LPCTSTR BUGSUTIL_DLLINTERFACE __stdcall
     g_stFrame.AddrFrame.Offset    = pExPtrs->ContextRecord->Ebp ;
     g_stFrame.AddrFrame.Mode      = AddrModeFlat                ;
     #else
-    g_stFrame.AddrPC.Offset       = (DWORD)pExPtrs->ContextRecord->Fir ;
+	//20151229
+	g_stFrame.AddrPC.Offset = pExPtrs->ContextRecord->Rip;
+	g_stFrame.AddrPC.Mode = AddrModeFlat;
+	g_stFrame.AddrStack.Offset = pExPtrs->ContextRecord->Rsp;
+	g_stFrame.AddrStack.Mode = AddrModeFlat;
+	g_stFrame.AddrFrame.Offset = pExPtrs->ContextRecord->Rbp;
+	g_stFrame.AddrFrame.Mode = AddrModeFlat;
+    /*g_stFrame.AddrPC.Offset       = (DWORD)pExPtrs->ContextRecord->Fir ;
     g_stFrame.AddrPC.Mode         = AddrModeFlat ;
     g_stFrame.AddrReturn.Offset   =
                                    (DWORD)pExPtrs->ContextRecord->IntRa;
@@ -623,7 +635,7 @@ LPCTSTR BUGSUTIL_DLLINTERFACE __stdcall
     g_stFrame.AddrStack.Mode      = AddrModeFlat ;
     g_stFrame.AddrFrame.Offset    =
                                    (DWORD)pExPtrs->ContextRecord->IntFp;
-    g_stFrame.AddrFrame.Mode      = AddrModeFlat ;
+    g_stFrame.AddrFrame.Mode      = AddrModeFlat ;*/
     #endif
 
     return ( InternalGetStackTraceString ( dwOpts , pExPtrs ) ) ;
@@ -649,7 +661,7 @@ BOOL __stdcall CH_ReadProcessMemory ( HANDLE                      ,
                                  lpBaseAddress         ,
                                  lpBuffer              ,
                                  nSize                 ,
-                                 lpNumberOfBytesRead    ) ) ;
+                                 (SIZE_T*)lpNumberOfBytesRead    ) ) ;
 }
 
 // The internal function that does all the stack walking
@@ -755,7 +767,11 @@ LPCTSTR __stdcall
         }
 
         ASSERT ( iCurr < ( BUFF_SIZE - MAX_PATH ) ) ;
+#ifdef _WIN64
+		DWORD64 dwDisp ;
+#else
         DWORD dwDisp ;
+#endif
 
         // Output the symbol name?
         if ( GSTSO_SYMBOL == ( dwOpts & GSTSO_SYMBOL ) )
@@ -822,12 +838,12 @@ LPCTSTR __stdcall
         {
             ZeroMemory ( &g_stLine , sizeof ( IMAGEHLP_LINE ) ) ;
             g_stLine.SizeOfStruct = sizeof ( IMAGEHLP_LINE ) ;
-
+			DWORD dwDisp32;
             if ( TRUE ==
                    InternalSymGetLineFromAddr ( (HANDLE)
                                                   GetCurrentProcessId(),
                                                 g_stFrame.AddrPC.Offset,
-                                                &dwDisp                ,
+												&dwDisp32,
                                                 &g_stLine             ))
             {
                 iCurr += wsprintf ( g_szBuff + iCurr , _T ( ", " ) ) ;
@@ -847,13 +863,13 @@ LPCTSTR __stdcall
                 }
                 else
                 {
-                    if ( dwDisp > 0 )
+					if (dwDisp32 > 0)
                     {
                         iCurr += wsprintf(g_szBuff + iCurr             ,
                                        _T("%s, line %04d+%04d byte(s)"),
                                           g_stLine.FileName            ,
                                           g_stLine.LineNumber          ,
-                                          dwDisp                     );
+										  dwDisp32);
                     }
                     else
                     {
@@ -1113,10 +1129,10 @@ LPCTSTR ConvertSimpleException ( DWORD dwExcept )
     }
 }
 
-BOOL InternalSymGetLineFromAddr ( IN  HANDLE          hProcess        ,
-                                  IN  DWORD           dwAddr          ,
-                                  OUT PDWORD          pdwDisplacement ,
-                                  OUT PIMAGEHLP_LINE  Line            )
+BOOL InternalSymGetLineFromAddr(IN  HANDLE          hProcess,
+	IN  DWORD           dwAddr,
+	OUT PDWORD          pdwDisplacement,
+	OUT PIMAGEHLP_LINE  Line)
 {
 #ifdef WORK_AROUND_SRCLINE_BUG
 
